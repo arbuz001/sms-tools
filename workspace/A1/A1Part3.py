@@ -1,3 +1,10 @@
+import numpy as np
+
+# import sys
+# import os
+# sys.path.append('../../software/models/')
+# from utilFunctions import wavread
+
 """
 A1-Part-3: Python array indexing
 
@@ -10,7 +17,9 @@ elements in x. The output of this function should be a numpy array.
 If you run your code with x = np.arange(10) and N = 2, the function should return the following output: 
 array([0, 2, 4, 6, 8]).
 """
-def hopSamples(x,N):
+
+
+def hopSamples(x, N):
     """
     Inputs:
         x: input numpy array
@@ -19,7 +28,29 @@ def hopSamples(x,N):
         A numpy array containing every Nth element in x, starting from the first element in x.
     """
     # method 1
-	
-	y = x[::N]
-    
-	return y
+
+    y = x[::N]
+
+    # bOutput = True
+    # validationOutput(bOutput, y)
+
+    return y
+
+
+def validationOutput(bOutput, y):
+    """
+    Input:
+        bOutput: whether to output code-validation information
+    Output:
+        Code-validation information
+    """
+    if (bOutput):
+        np.set_printoptions(10)
+        print 'y: '
+        print y
+
+    return
+
+# x_ = np.arange(10)
+# N = 2
+# hopSamples(x_,N)

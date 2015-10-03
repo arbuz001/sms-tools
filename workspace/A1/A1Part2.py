@@ -25,8 +25,33 @@ def minMaxAudio(inputFile):
         A tuple of the minimum and the maximum value of the audio samples, like: (min_val, max_val)
     """
 
-    x = wavread(inputFile)[1]
+    dataIn = wavread(inputFile)
+    fs0 = dataIn[0]
+    x = dataIn[1]
+
     max_val = max(x)
     min_val = min(x)
 
-    return (min_val,max_val)	
+    # bOutput = True
+    # validationOutput(bOutput,max_val,min_val)
+
+    return (min_val,max_val)
+
+# def validationOutput(bOutput,max_val,min_val):
+#     """
+#     Input:
+#         bOutput: whether to output code-validation information
+#     Output:
+#         Code-validation information
+#     """
+#     if (bOutput):
+#         print 'min_val: '
+#         print '%.9f' % min_val
+#
+#         print 'max_val: '
+#         print '%.9f' % max_val
+#
+#     return
+#
+# inputFile_ = "/home/alex/Documents/sms-tools/sounds/oboe-A4.wav"
+# minMaxAudio(inputFile_)
