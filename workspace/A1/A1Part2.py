@@ -1,5 +1,7 @@
 import sys
 import os
+from scipy.io.wavfile import read
+from scipy.io.wavfile import write
 sys.path.append('../../software/models/')
 from utilFunctions import wavread
 
@@ -22,4 +24,9 @@ def minMaxAudio(inputFile):
     Output:
         A tuple of the minimum and the maximum value of the audio samples, like: (min_val, max_val)
     """
-    ## Your code here
+
+    x = wavread(inputFile)[1]
+    max_val = max(x)
+    min_val = min(x)
+
+    return (min_val,max_val)	

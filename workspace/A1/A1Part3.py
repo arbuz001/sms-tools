@@ -18,4 +18,8 @@ def hopSamples(x,N):
     Output:
         A numpy array containing every Nth element in x, starting from the first element in x.
     """
-    ## Your code here
+    # method 1
+	
+	y = x[::N]
+    
+	return y
