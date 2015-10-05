@@ -1,4 +1,10 @@
 import numpy as np
+import math
+# import sys
+# import os
+import matplotlib.pyplot as plt
+# from scipy.io.wavfile import read
+# from scipy.io.wavfile import write
 
 """
 A2-Part-1: Generate a sinusoid
@@ -25,4 +31,41 @@ def genSine(A, f, phi, fs, t):
         The function should return a numpy array
         x (numpy array) = The generated sinusoid (use np.cos())
     """
-    ## Your code here
+
+    dt = np.arange(0,t,1/fs)
+
+    y = A*np.cos(2.0*math.pi*f*dt + phi)
+
+    # bOutput = True
+    # validationOutput(bOutput, dt, y)
+
+    return y
+
+def validationOutput(bOutput, dt, y):
+    """
+    Input:
+        bOutput: whether to output code-validation information
+    Output:
+        Code-validation information
+    """
+    if (bOutput):
+        np.set_printoptions(10)
+        print 'y: '
+        print y
+
+        plt.plot(dt, y)
+        plt.xlabel('time')
+        plt.ylabel('f(t)')
+        plt.axis([0.0,1.0,-.8,.8])
+
+        plt.show()
+
+    return
+
+# A=1.0
+# f = 10.0
+# phi = 1.0
+# fs = 50.0
+# t = 0.1
+
+# genSine(A,f,phi,fs,t)

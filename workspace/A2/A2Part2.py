@@ -1,4 +1,6 @@
 import numpy as np
+import math
+import matplotlib.pyplot as plt
 
 """
 A2-Part-2: Generate a complex sinusoid 
@@ -25,4 +27,42 @@ def genComplexSine(k, N):
         The function should return a numpy array
         cSine (numpy array) = The generated complex sinusoid (length N)
     """
-    ## Your code here
+    idx = np.arange(0,N)
+    y = 1.0*np.exp(-1j*(2.0*math.pi*k*idx/N))
+
+    # bOutput = True
+    # validationOutput(bOutput, y)
+
+    return y
+
+def validationOutput(bOutput, y):
+    """
+    Input:
+        bOutput: whether to output code-validation information
+    Output:
+        Code-validation information
+    """
+    if (bOutput):
+        np.set_printoptions(8)
+
+        y_real = y.real
+        y_imag = y.imag
+        print 'y: '
+        print y
+
+        print 'y_real: '
+        print y_real
+
+        print 'y_imag: '
+        print y_imag
+
+        plt.title('real part')
+        plt.plot(y_real)
+        plt.show()
+
+    return
+
+# k = 1
+# N = 5
+#
+# genComplexSine(k,N)
