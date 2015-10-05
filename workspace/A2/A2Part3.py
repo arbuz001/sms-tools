@@ -1,4 +1,7 @@
 import numpy as np
+import math
+import matplotlib.pyplot as plt
+import A2Part2
 
 """
 A2-Part-3: Implement the discrete Fourier transform (DFT)
@@ -25,4 +28,50 @@ def DFT(x):
         The function should return a numpy array of length N
         X (numpy array) = The N point DFT of the input sequence x
     """
-    ## Your code here
+    X = np.array([])
+
+    N = len(x)
+
+    for k in range(N):
+        s = A2Part2.genComplexSine(k, N)
+        X = np.append(X,np.sum(x*s))
+
+    # bOutput = True
+    # validationOutput(bOutput, X)
+
+    return X
+
+def validationOutput(bOutput, X):
+    """
+    Input:
+        bOutput: whether to output code-validation information
+    Output:
+        Code-validation information
+    """
+    if (bOutput):
+        np.set_printoptions(8)
+
+        X_real = X.real
+        X_imag = X.imag
+
+        print 'DFT of x: '
+        print X
+
+        print 'X_real: '
+        print X_real
+
+        print 'X_imag: '
+        print X_imag
+
+        plt.title('amplitude of x')
+        plt.plot(X_real)
+        plt.show()
+
+        plt.title('phase of x')
+        plt.plot(X_imag)
+        plt.show()
+
+    return
+
+# x = np.array([1, 2, 3, 4])
+# DFT(x)
