@@ -1,4 +1,8 @@
 import numpy as np
+import math
+# import cmath
+# import matplotlib.pyplot as plt
+import A2Part2
 
 """
 A2-Part-4: Implement the inverse discrete Fourier transform (IDFT)
@@ -32,4 +36,20 @@ def IDFT(X):
         The function should return a numpy array of length N 
         x (numpy array) = The N point IDFT of the frequency spectrum X
     """
-    ## Your code here
+    x = np.array([])
+
+    N = len(X)
+
+    for i in range(N):
+        idx = np.arange(0,N)
+        # s = 1.0*np.exp(1j*(2.0*math.pi*i*idx/N))
+        s = A2Part2.genComplexSine(-i, N)
+        x = np.append(x,np.sum(X*s))
+
+    return x/N
+
+
+# X = np.array([1 ,1 ,1 ,1])
+#
+# print 'IDFT of X: '
+# print IDFT(X)

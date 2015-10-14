@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import cmath
 import matplotlib.pyplot as plt
 import A2Part2
 
@@ -51,27 +52,32 @@ def validationOutput(bOutput, X):
     if (bOutput):
         np.set_printoptions(8)
 
-        X_real = X.real
-        X_imag = X.imag
+        X_abs = abs(X)
+        # X_phase = cmath.p hase(X)
 
         print 'DFT of x: '
         print X
 
-        print 'X_real: '
-        print X_real
+        # print 'X_real: '
+        # print X_abs
+        #
+        # N = len(x)
+        #
+        # plt.title('amplitude of x')
+        # plt.plot(np.arange(-N/2,N/2),X_abs)
+        # plt.show()
 
-        print 'X_imag: '
-        print X_imag
-
-        plt.title('amplitude of x')
-        plt.plot(X_real)
-        plt.show()
-
-        plt.title('phase of x')
-        plt.plot(X_imag)
-        plt.show()
+        # plt.title('phase of x')
+        # plt.plot(X_phase)
+        # plt.show()
 
     return
 
 # x = np.array([1, 2, 3, 4])
+
+# k0 = 0
+# N = 20
+#
+# x = A2Part2.genComplexSine(k0,N)
+
 # DFT(x)

@@ -1,4 +1,7 @@
 import numpy as np
+import math
+import cmath
+import A2Part3
 
 """
 A2-Part-5: Compute the magnitude spectrum (Optional)
@@ -21,4 +24,10 @@ def genMagSpec(x):
         magX (numpy array) = The magnitude spectrum of the input sequence x
                              (length N)
     """
-    ## Your code here
+    X = A2Part3.DFT(x)
+    magX = abs(X)
+
+    return magX
+
+# x = np.array([1, 2, 3, 4])
+# print genMagSpec(x)
