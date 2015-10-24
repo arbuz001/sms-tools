@@ -71,7 +71,7 @@ def suppressFreqDFTmodel(x, fs, N):
     outputScaleFactor = sum(w)
 
     xfilt = x.copy()
-    y = dftModel(x, w, N)
+    y = dftModel(x, w, N)*outputScaleFactor
 
     (mXfilt, pXfilt) = dftAnal(xfilt, w, N)
 
@@ -81,7 +81,7 @@ def suppressFreqDFTmodel(x, fs, N):
     plt.plot(mXfilt)
     plt.show()
 
-    yfilt = dftSynth(mXfilt, pXfilt, N)
+    yfilt = dftSynth(mXfilt, pXfilt, N)*outputScaleFactor
 
     # plt.plot(y)
     # plt.show()
@@ -89,7 +89,7 @@ def suppressFreqDFTmodel(x, fs, N):
     # plt.plot(yfilt)
     # plt.show()
 
-    return y, yfilt
+    return (y, yfilt)
 
 # ************ test case 1 ************
 #

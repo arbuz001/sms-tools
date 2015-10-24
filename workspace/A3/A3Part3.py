@@ -72,7 +72,7 @@ def testRealEven(x):
 
         isRealEven = (sum(abs(subX1 - reverse_subX2)) < tol)
 
-    return isRealEven, dftbuffer, X
+    return (bool(isRealEven), dftbuffer, X)
 
     # # ************ test case 1 ************
     # x = np.array([ 2, 3, 4, 3, 2])
