@@ -10,7 +10,7 @@ import math
 sys.path.append('../A2')
 from A2Part1 import genSine
 
-ffilt = 70.0  # lower bound frequency for filtering
+fUpTo = 70.0  # filter all frequencies in the interval [0;fUpTo]
 
 """
 A3-Part-4: Suppressing frequency components using DFT model
@@ -68,46 +68,43 @@ def suppressFreqDFTmodel(x, fs, N):
     """
     M = len(x)
     w = get_window('hamming', M)
-    outputScaleFactor = sum(w)
+    w = w / sum(w)
 
-    xfilt = x.copy()
-    y = dftModel(x, w, N)*outputScaleFactor
+    (mX, pX) = dftAnal(x, w, N)
+    ybuffer = dftSynth(mX, pX, M)
 
-    (mXfilt, pXfilt) = dftAnal(xfilt, w, N)
+    y = ybuffer/w						# undo windowing
 
-    nFilter = int(ffilt*N/fs)+1
-    mXfilt[:nFilter] = -120.0
-
-    plt.plot(mXfilt)
-    plt.show()
-
-    yfilt = dftSynth(mXfilt, pXfilt, N)*outputScaleFactor
-
-    # plt.plot(y)
-    # plt.show()
-    #
-    # plt.plot(yfilt)
+    mXfiltered = mX.copy()
+    nfilterTo = math.ceil(fUpTo)
+    mXfiltered[:nfilterTo] = -120.0
+    # plt.plot(mXfiltered)
     # plt.show()
 
-    return (y, yfilt)
+    yfiltbuffer = dftSynth(mXfiltered, pX, M)
+    yfiltered = yfiltbuffer/w					# undo windowing
+
+    # plt.plot(yfiltered)
+    # plt.show()
+    return (y, yfiltered)
 
 # ************ test case 1 ************
-#
-# N = 2048
-#
+
+# N = 1024
+
 # A = 1.0
 # phi = 0.0
-# t = 0.1
-#
-# fs = 10000.0
-# f = 1000.0
-#
+# t = 1.0
+
+# fs = 100.0
+# f = 75.0
+
 # x = genSine(A, f, phi, fs, t)
-#
+
 # afreq = np.array([40, 100, 200])
 # for freq in afreq:
-#     x = x + genSine(A, freq, phi, fs, t)
-#
+    # x = x + genSine(A, freq, phi, fs, t)
+
 # suppressFreqDFTmodel(x, fs, N)
 
 # ************ test case 2 ************
