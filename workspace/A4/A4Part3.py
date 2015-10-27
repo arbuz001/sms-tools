@@ -18,21 +18,17 @@ fHigh2 = 10000
 
 """
 A4-Part-3: Computing band-wise energy envelopes of a signal
-
 Write a function that computes band-wise energy envelopes of a given audio signal by using the STFT.
 Consider two frequency bands for this question, low and high. The low frequency band is the set of 
 all the frequencies between 0 and 3000 Hz and the high frequency band is the set of all the 
 frequencies between 3000 and 10000 Hz (excluding the boundary frequencies in both the cases). 
 At a given frame, the value of the energy envelope of a band can be computed as the sum of squared 
 values of all the frequency coefficients in that band. Compute the energy envelopes in decibels. 
-
 Refer to "A4-STFT.pdf" document for further details on computing bandwise energy.
-
 The input arguments to the function are the wav file name including the path (inputFile), window 
 type (window), window length (M), FFT size (N) and hop size (H). The function should return a numpy 
 array with two columns, where the first column is the energy envelope of the low frequency band and 
 the second column is that of the high frequency band.
-
 Use stft.stftAnal() to obtain the STFT magnitude spectrum for all the audio frames. Then compute two 
 energy values for each frequency band specified. While calculating frequency bins for each frequency 
 band, consider only the bins that are within the specified frequency range. For example, for the low 
@@ -40,31 +36,25 @@ frequency band consider only the bins with frequency > 0 Hz and < 3000 Hz (you c
 find those bin indexes). This way we also remove the DC offset in the signal in energy envelope 
 computation. The frequency corresponding to the bin index k can be computed as k*fs/N, where fs is 
 the sampling rate of the signal.
-
 To get a better understanding of the energy envelope and its characteristics you can plot the envelopes 
 together with the spectrogram of the signal. You can use matplotlib plotting library for this purpose. 
 To visualize the spectrogram of a signal, a good option is to use colormesh. You can reuse the code in
 sms-tools/lectures/4-STFT/plots-code/spectrogram.py. Either overlay the envelopes on the spectrogram 
 or plot them in a different subplot. Make sure you use the same range of the x-axis for both the 
 spectrogram and the energy envelopes.
-
 NOTE: Running these test cases might take a few seconds depending on your hardware.
-
 Test case 1: Use piano.wav file with window = 'blackman', M = 513, N = 1024 and H = 128 as input. 
 The bin indexes of the low frequency band span from 1 to 69 (69 samples) and of the high frequency 
 band span from 70 to 232 (163 samples). To numerically compare your output, use loadTestCases.py
 script to obtain the expected output.
-
 Test case 2: Use piano.wav file with window = 'blackman', M = 2047, N = 4096 and H = 128 as input. 
 The bin indexes of the low frequency band span from 1 to 278 (278 samples) and of the high frequency 
 band span from 279 to 928 (650 samples). To numerically compare your output, use loadTestCases.py
 script to obtain the expected output.
-
 Test case 3: Use sax-phrase-short.wav file with window = 'hamming', M = 513, N = 2048 and H = 256 as 
 input. The bin indexes of the low frequency band span from 1 to 139 (139 samples) and of the high 
 frequency band span from 140 to 464 (325 samples). To numerically compare your output, use 
 loadTestCases.py script to obtain the expected output.
-
 In addition to comparing results with the expected output, you can also plot your output for these 
 test cases.You can clearly notice the sharp attacks and decay of the piano notes for test case 1 
 (See figure in the accompanying pdf). You can compare this with the output from test case 2 that 
@@ -91,25 +81,39 @@ def computeEngEnv(inputFile, window, M, N, H):
     w = get_window(window, M)
     (xmX, xpX) = stft.stftAnal(x, fs, w, N, H)
 
-    kLow1 = int(np.ceil(N*(fLow1+eps)/float(fs)))
-    kLow2 = int(np.floor(N*(fLow2)/float(fs)))
-
-    kHigh1 = int(np.ceil(N*(fHigh1+eps)/float(fs)))
-    kHigh2 = int(np.floor(N*(fHigh2)/float(fs)))
-
-    nHops = xmX.shape[0]
+    kLow1 = 0
+    
+    kLow2 = 0
+    while (True):
+	kLow2 += 1
+	if( (kLow2 < N*(fLow2)/float(fs)) & (kLow2 > N*(fLow2)/float(fs) - 1.0 ) ):
+	    break
+    
+    kHigh1 = 0
+    while (True):
+	kHigh1 += 1
+	if( (kHigh1 < N*(fHigh1)/float(fs)) & (kHigh1 > N*(fHigh1)/float(fs) - 1.0 ) ):
+	    break
+    
+    kHigh2 = 0
+    while (True):
+	kHigh2 += 1
+	if( (kHigh2 < N*(fHigh2)/float(fs)) & (kHigh2 > N*(fHigh2)/float(fs) - 1.0 ) ):
+	    break
+    
+    nHops = int(xmX.shape[0])
     out = np.zeros((nHops,2))
     
     i = 0
     while i < nHops:
         subxmX = xmX[i,:]
     
-        subLowxmX = subxmX[kLow1:kLow2-1]
+        subLowxmX = subxmX[kLow1+1:kLow2+1]
         subLowxmX = 10**(subLowxmX/20)
         eSignalLow = sum(subLowxmX**2)
         out[i,0] = 10.0*np.log10(eSignalLow)
 
-        subHighxmX = subxmX[kHigh1:kHigh2-1]
+        subHighxmX = subxmX[kHigh1+1:kHigh2+1]
         subHighxmX = 10**(subHighxmX/20)
         eSignalHigh = sum(subHighxmX**2)
         out[i,1] = 10.0*np.log10(eSignalHigh)
@@ -118,16 +122,14 @@ def computeEngEnv(inputFile, window, M, N, H):
 
     return out
 
-inputFile = "/home/alex/Documents/sms-tools/sounds/piano.wav"
+# inputFile = "/home/alex/Documents/sms-tools/sounds/piano.wav"
 
-M = 513
-N = 1024
-H = 128
-window = "blackman"
+# M = 513
+# N = 1024
+# H = 128
+# window = "blackman"
 
 # out = computeEngEnv(inputFile, window, M, N, H)
-
-
 
 # inputFile = "/home/alex/Documents/sms-tools/sounds/piano.wav"
 
@@ -146,32 +148,3 @@ window = "blackman"
 # window = "hamming"
 
 # out = computeEngEnv(inputFile, window, M, N, H)
-
-(fs,x) = UF.wavread(inputFile)
-w = get_window(window, M)
-(xmX, xpX) = stft.stftAnal(x, 1.0, w, N, H)
-
-kLow1 = np.ceil(N*(fLow1+eps)/float(fs))
-kLow2 = np.floor(N*(fLow2+eps)/float(fs))
-
-kHigh1 = np.ceil(N*(fHigh1+eps)/float(fs))
-kHigh2 = np.floor(N*(fHigh2+eps)/float(fs))
-
-nHops = xmX.shape[0]
-out = np.zeros((nHops,2))
-    
-i = 0
-while i < nHops:
-    subxmX = xmX[i,:]
-   
-    subLowxmX = subxmX[kLow1:kLow2+1]
-    subLowxmX = 10**(subLowxmX/20)
-    eSignalLow = sum(subLowxmX**2)
-    out[i,0] = 10.0*np.log10(eSignalLow)
-
-    subHighxmX = subxmX[kHigh1:kHigh2+1]
-    subHighxmX = 10**(subHighxmX/20)
-    eSignalHigh = sum(subHighxmX**2)
-    out[i,1] = 10.0*np.log10(eSignalHigh)
-    
-    i += 1
